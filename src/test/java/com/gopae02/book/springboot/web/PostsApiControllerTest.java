@@ -70,8 +70,10 @@ public class PostsApiControllerTest {
         //when
         ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, requestDto, Object.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        //assertThat((Long)responseEntity.getBody()).isGreaterThan(0L);
+        Long longTemp = Long.parseLong(responseEntity.getBody().toString());
+        assertThat(longTemp).isGreaterThan(0L);
         // 20-01-15 issue: Long.class처리 안되서 Object 변환하여 처리.
+        // 20-01-20 : Int를 String 변환후, Long 변환처리
         /*
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)

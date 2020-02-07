@@ -2,6 +2,7 @@ package com.gopae02.book.springboot.service;
 
 import com.gopae02.book.springboot.domain.posts.Posts;
 import com.gopae02.book.springboot.domain.posts.PostsRepository;
+import com.gopae02.book.springboot.web.dto.PostsListResponseDto;
 import com.gopae02.book.springboot.web.dto.PostsResponseDto;
 import com.gopae02.book.springboot.web.dto.PostsSaveRequestDto;
 import com.gopae02.book.springboot.web.dto.PostsUpdateRequestDto;
@@ -50,4 +51,10 @@ public class PostsService {
         postsRepository.delete(posts);
     }
     */
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findAllDesc() {
+        return postsRepository.findAllDesc().stream()
+                .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
+    }
 }

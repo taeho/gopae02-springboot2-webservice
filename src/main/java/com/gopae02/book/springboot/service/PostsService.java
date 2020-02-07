@@ -42,7 +42,13 @@ public class PostsService {
         return new PostsResponseDto(entity);
     }
 
-    /*
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findAllDesc() {
+        return postsRepository.findAllDesc().stream()
+                .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public void delete (Long id) {
         Posts posts = postsRepository.findById(id)
@@ -50,11 +56,5 @@ public class PostsService {
 
         postsRepository.delete(posts);
     }
-    */
-    @Transactional(readOnly = true)
-    public List<PostsListResponseDto> findAllDesc() {
-        return postsRepository.findAllDesc().stream()
-                .map(PostsListResponseDto::new)
-                .collect(Collectors.toList());
-    }
+
 }

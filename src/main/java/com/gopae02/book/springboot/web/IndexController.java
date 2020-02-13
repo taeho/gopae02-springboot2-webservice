@@ -1,5 +1,6 @@
 package com.gopae02.book.springboot.web;
 
+import com.gopae02.book.springboot.config.auth.LoginUser;
 import com.gopae02.book.springboot.config.auth.dto.SessionUser;
 import com.gopae02.book.springboot.service.PostsService;
 import com.gopae02.book.springboot.web.dto.PostsResponseDto;
@@ -16,12 +17,12 @@ import javax.servlet.http.HttpSession;
 public class IndexController {
 
     private final PostsService postsService;
-    private final HttpSession httpSession;
 
+    // @LoginUser SessionUser user : 기존 httpSession.getAttibute("user") 방식에서 변경
+    // 어느컨트롤러에서든지 @LoginUser만 사용하면 세션 정보를 가져올수 있다.
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, @LoginUser SessionUser user) {
         model.addAttribute("posts", postsService.findAllDesc());
-        SessionUser user = (SessionUser)httpSession.getAttribute("user");
         if (user != null) {
             model.addAttribute("userName", user.getName());
         }

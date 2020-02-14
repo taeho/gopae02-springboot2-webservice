@@ -1,9 +1,13 @@
 package com.gopae02.book.springboot.web;
 
+import com.gopae02.book.springboot.config.auth.SecurityConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -15,12 +19,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)    // 테스트를  진행할때, junit에 내장된 실행자외 다른 실행자를 실행.
 // 여기서는 springrunner 실행자 사용, 즉. 스프링 부트 테스트와 junit 사이에 연결자 역할
-@WebMvcTest // springmvc 에 집중할수잇는 테스트 어노테이션선언
+// @WebMvcTest // springmvc 에 집중할수잇는 테스트 어노테이션선언
+@WebMvcTest(controllers = HelloController.class,
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
+        }
+)
 public class HelloControllerTest {
 
     @Autowired  // 스프링이 관리하는 빈Bean 주입받음
     private MockMvc mvc;    // 웹 api 테스트시 사용. 스프링 mvc 테스트의 시작점.. http get, post 테스트 가능
 
+    @WithMockUser(roles="USER")
     @Test
     public void hello가_리턴된다() throws Exception {
         String hello = "hello";
@@ -30,6 +40,7 @@ public class HelloControllerTest {
                 .andExpect(content().string(hello));    // mvc perform 결과 검증. 응답 본문의 내용 검증., cotroller에서 hello 리턴한거 검증한다
     }
 
+    @WithMockUser(roles="USER")
     @Test
     public void helloDto가_리턴된다() throws Exception {
         String name = "hello";

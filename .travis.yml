@@ -7,6 +7,9 @@ branches:
   only:
     - master
 
+before_install:
+    - chmod +x gradlew
+
 # Travis CI 서버의 Home 그리고 같은 의존성은 다음 배포 때부터 다시 받지 않도록 설정
 cache:
   directories:
